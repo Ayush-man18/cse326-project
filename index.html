@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoThreads - Sustainable Fashion Marketplace</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">🌿 EcoThreads</div>
+    <div class="nav-links">
+      <a href="#shop">Shop</a>
+      <a href="#admin-panel">Admin Panel</a>
+      <button class="nav-btn" onclick="openModal('auth-modal')">👤 Login / Sign Up</button>
+      <button class="cart-btn" onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Sustainable Fashion Marketplace</h1>
+    <p>100% Upcycled, Organic, and Zero-Waste Handcrafted Clothing.</p>
+  </section>
+
+  <!-- Controls: Search & Category Filter -->
+  <section class="controls" id="shop">
+    <input type="text" id="search-box" placeholder="Search eco products..." oninput="filterProducts()" />
+    <select id="category-filter" onchange="filterProducts()">
+      <option value="All">All Categories</option>
+      <option value="Jackets">Jackets</option>
+      <option value="Shirts">Shirts</option>
+      <option value="Pants">Pants</option>
+    </select>
+  </section>
+
+  <!-- Product Catalog Grid -->
+  <main class="product-grid" id="product-container"></main>
+
+  <!-- Sliding Shopping Cart Drawer -->
+  <div class="cart-drawer" id="cart-drawer">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="cart-total">Total: ₹<span id="cart-total-price">0</span></div>
+    <button class="checkout-btn" onclick="startCheckout()">Proceed to Checkout</button>
+    <button class="close-btn" onclick="toggleCart()">Close</button>
+  </div>
+
+  <!-- Modal: Product Details & Reviews -->
+  <div class="modal" id="details-modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('details-modal')">&times;</span>
+      <div id="modal-product-body"></div>
+    </div>
+  </div>
+
+  <!-- Modal: User Authentication (Login/Register) -->
+  <div class="modal" id="auth-modal">
+    <div class="modal-content auth-box">
+      <span class="close-modal" onclick="closeModal('auth-modal')">&times;</span>
+      <h2 id="auth-title">Login to EcoThreads</h2>
+      <form id="auth-form" onsubmit="handleAuth(event)">
+        <input type="text" id="auth-name" placeholder="Full Name" />
+        <input type="email" id="auth-email" placeholder="Email Address" required />
+        <input type="password" id="auth-pass" placeholder="Password (Min 6 chars)" minlength="6" required />
+        <button type="submit" class="submit-btn" id="auth-submit-btn">Login</button>
+      </form>
+      <p class="auth-toggle-text">
+        <span id="auth-switch-text">Don't have an account?</span> 
+        <a href="javascript:void(0)" onclick="toggleAuthMode()" id="auth-toggle-link">Sign Up</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Modal: Checkout Form -->
+  <div class="modal" id="checkout-modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal('checkout-modal')">&times;</span>
+      <h2>Checkout & Delivery</h2>
+      <form id="checkout-form" onsubmit="handleOrderSubmit(event)">
+        <input type="text" id="cust-name" placeholder="Full Name" required />
+        <input type="text" id="cust-address" placeholder="Delivery Address / Hostel Room" required />
+        <input type="tel" id="cust-phone" placeholder="Phone Number" pattern="[0-9]{10}" required />
+        <label>Payment Method:</label>
+        <select id="payment-method" required>
+          <option value="UPI">UPI / QR (Dummy)</option>
+          <option value="Card">Credit/Debit Card (Dummy)</option>
+          <option value="COD">Cash on Delivery</option>
+        </select>
+        <div class="order-summary-box">
+          <p>Total Payable: <strong>₹<span id="checkout-total-price">0</span></strong></p>
+        </div>
+        <button type="submit" class="submit-btn">Confirm Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Panel (CRUD Operations) -->
+  <section class="admin-section" id="admin-panel">
+    <h2>Admin Panel (Catalogue CRUD)</h2>
+    <form id="add-product-form" onsubmit="handleAddProduct(event)">
+      <input type="text" id="prod-name" placeholder="Product Name" required />
+      <select id="prod-category" required>
+        <option value="Jackets">Jackets</option>
+        <option value="Shirts">Shirts</option>
+        <option value="Pants">Pants</option>
+      </select>
+      <input type="number" id="prod-price" placeholder="Price (₹)" required />
+      <input type="text" id="prod-tag" placeholder="Eco Tag (e.g., 100% Recycled)" required />
+      <input type="url" id="prod-img" placeholder="Image URL (Unsplash/Pexels)" required />
+      <button type="submit" class="add-btn">Add Product</button>
+    </form>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="admin-table-body"></tbody>
+    </table>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

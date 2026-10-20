@@ -1,0 +1,327 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f7f9f6;
+  color: #2b3a2a;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #2e4f32;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar .nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-btn, .cart-btn {
+  background: #a3c9a8;
+  color: #1b301e;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #e6ede6;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.controls input, .controls select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #99a89c;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.card-details {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.eco-badge {
+  background: #e2ede0;
+  color: #2e4f32;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  font-weight: bold;
+}
+
+.card-details h3 {
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.card-details .price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2e4f32;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.view-btn {
+  background: #eef3ed;
+  color: #2e4f32;
+  border: 1px solid #2e4f32;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.add-cart-btn {
+  background: #2e4f32;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 2;
+}
+
+/* Cart Drawer */
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 320px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  transition: 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.cart-drawer.open {
+  right: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.cart-total {
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.checkout-btn, .submit-btn {
+  width: 100%;
+  background: #2e4f32;
+  color: #fff;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #ccc;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Modals */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.auth-box form, #checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.auth-box input, #checkout-form input, #checkout-form select {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.auth-toggle-text {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.order-summary-box {
+  background: #f1f6f0;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 0.5rem 0;
+}
+
+/* Admin Section */
+.admin-section {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.admin-section h2 {
+  margin-bottom: 1rem;
+}
+
+#add-product-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+#add-product-form input, #add-product-form select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  flex: 1 1 200px;
+}
+
+.add-btn {
+  background: #2e4f32;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.delete-btn {
+  background: #d9534f;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+} 
