@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoThreads - Sustainable & Circular Fashion Marketplace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            forest: {
+              DEFAULT: '#1b4332',
+              dark: '#081c15',
+              light: '#2d6a4f',
+              accent: '#40916c',
+              soft: '#d8f3dc'
+            },
+            linen: '#f8f9fa'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #f8f9fa; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="text-neutral-900 font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('store')">
+        <div class="w-10 h-10 rounded-xl bg-forest flex items-center justify-center text-white shadow-sm">
+          <i class="fa-solid fa-leaf text-lg"></i>
+        </div>
+        <div>
+          <span class="text-xl font-bold tracking-tight text-forest">Eco<span class="text-forest-accent">Threads</span></span>
+          <span class="block text-[10px] uppercase tracking-wider font-semibold text-neutral-400">Circular Fashion Co.</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-1">
+        <button id="navStoreBtn" onclick="switchView('store')" class="px-4 py-2 rounded-lg font-medium text-sm transition-colors text-forest bg-forest-soft">
+          <i class="fa-solid fa-store mr-2"></i>Marketplace
+        </button>
+        <button id="navAdminBtn" onclick="switchView('admin')" class="px-4 py-2 rounded-lg font-medium text-sm transition-colors text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">
+          <i class="fa-solid fa-chart-pie mr-2"></i>Admin Dashboard
+        </button>
+      </nav>
+
+      <div class="flex items-center space-x-3">
+        <!-- Role Indicator -->
+        <span id="roleBadge" class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+          <i class="fa-solid fa-user mr-1.5 text-[10px]"></i> Shopper Mode
+        </span>
+
+        <!-- Cart Button -->
+        <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl border border-neutral-200 hover:border-neutral-300 bg-white hover:bg-neutral-50 transition-colors">
+          <i class="fa-solid fa-bag-shopping text-neutral-700"></i>
+          <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-forest text-white text-[11px] font-bold h-5 w-5 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-grow">
+    
+    <!-- ==================== SHOPPER / STORE VIEW ==================== -->
+    <div id="storeView" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- Hero Banner -->
+      <section class="rounded-3xl bg-gradient-to-r from-forest via-forest-light to-forest-accent text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium tracking-wide">
+            <i class="fa-solid fa-seedling text-emerald-300"></i> Zero Plastic • 100% Circular Supply Chain
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">Wear change. <br/>Ditch the footprint.</h1>
+          <p class="text-neutral-200 text-sm sm:text-base leading-relaxed">
+            Every garment here directly reports its carbon reduction, recycled content, and ethical artisan origin. Transparent fashion built for longevity.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-4 text-xs font-semibold">
+            <div class="bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm"><i class="fa-solid fa-recycle text-emerald-300 mr-2"></i>Post-Consumer Upcycling</div>
+            <div class="bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm"><i class="fa-solid fa-tree text-emerald-300 mr-2"></i>Regenerative Fibers</div>
+            <div class="bg-white/10 px-4 py-2 rounded-xl backdrop-blur-sm"><i class="fa-solid fa-shield-heart text-emerald-300 mr-2"></i>Fair Trade Certified</div>
+          </div>
+        </div>
+        <div class="absolute -right-16 -bottom-16 opacity-10 text-[260px] pointer-events-none select-none">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+      </section>
+
+      <!-- Search, Categories & Filter Bar -->
+      <section class="space-y-4">
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded-2xl border border-neutral-200 shadow-sm">
+          <!-- Search -->
+          <div class="relative w-full md:w-96">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-neutral-400 text-sm"></i>
+            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search hemp shirts, khadi, denim..." 
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-forest focus:border-transparent transition" />
+          </div>
+
+          <!-- Controls: Category + Sort -->
+          <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <select id="categoryFilter" onchange="applyFilters()" class="px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm bg-neutral-50/50 focus:ring-2 focus:ring-forest focus:outline-none font-medium">
+              <option value="All">All Categories</option>
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Unisex">Unisex</option>
+              <option value="Upcycled">Upcycled & Denim</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+
+            <select id="sortBy" onchange="applyFilters()" class="px-3.5 py-2.5 rounded-xl border border-neutral-200 text-sm bg-neutral-50/50 focus:ring-2 focus:ring-forest focus:outline-none font-medium">
+              <option value="featured">Sort: Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="carbon">Highest CO₂ Saved</option>
+              <option value="rating">Top Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs text-neutral-500 font-medium px-1">
+          <span id="productCountLabel">Showing 20 sustainable items</span>
+          <span class="text-forest font-semibold"><i class="fa-solid fa-shield-halved mr-1"></i>Verified Lifecycle Assessment</span>
+        </div>
+      </section>
+
+      <!-- Products Grid -->
+      <section id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Rendered dynamically -->
+      </section>
+    </div>
+
+    <!-- ==================== ADMIN DASHBOARD VIEW ==================== -->
+    <div id="adminView" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- Admin Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-6">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-forest-soft text-forest text-xs font-bold uppercase tracking-wider mb-2">
+            Store Ops Dashboard
+          </div>
+          <h2 class="text-2xl font-bold tracking-tight text-neutral-900">Merchant Operations & Analytics</h2>
+          <p class="text-sm text-neutral-500">Manage products, inventory metrics, environmental dividends, and incoming orders.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="openProductModal()" class="px-4 py-2.5 bg-forest hover:bg-forest-light text-white text-sm font-semibold rounded-xl shadow-sm transition flex items-center">
+            <i class="fa-solid fa-plus mr-2"></i> Add New Product
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Metrics -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-white p-5 rounded-2xl border border-neutral-200 shadow-sm space-y-2">
+          <span class="text-xs uppercase font-semibold text-neutral-400 tracking-wider">Gross Platform Revenue</span>
+          <div class="flex items-baseline justify-between">
+            <span id="kpiRevenue" class="text-2xl font-extrabold text-neutral-900">₹0</span>
+            <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">+18.4%</span>
+          </div>
+          <p class="text-[11px] text-neutral-400">Total orders fulfilled & in transit</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-neutral-200 shadow-sm space-y-2">
+          <span class="text-xs uppercase font-semibold text-neutral-400 tracking-wider">Orders Processed</span>
+          <div class="flex items-baseline justify-between">
+            <span id="kpiOrders" class="text-2xl font-extrabold text-neutral-900">0</span>
+            <span class="text-xs text-forest font-bold bg-forest-soft px-2 py-0.5 rounded-full">Live Synced</span>
+          </div>
+          <p class="text-[11px] text-neutral-400">Customer checkouts recorded</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-neutral-200 shadow-sm space-y-2">
+          <span class="text-xs uppercase font-semibold text-neutral-400 tracking-wider">Active Inventory Count</span>
+          <div class="flex items-baseline justify-between">
+            <span id="kpiProducts" class="text-2xl font-extrabold text-neutral-900">20</span>
+            <span class="text-xs text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded-full">In Stock</span>
+          </div>
+          <p class="text-[11px] text-neutral-400">Across 5 circular categories</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-neutral-200 shadow-sm space-y-2">
+          <span class="text-xs uppercase font-semibold text-neutral-400 tracking-wider">Total CO₂ Diverted</span>
+          <div class="flex items-baseline justify-between">
+            <span id="kpiCarbon" class="text-2xl font-extrabold text-emerald-700">0.0 kg</span>
+            <span class="text-xs text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded-full">Eco Impact</span>
+          </div>
+          <p class="text-[11px] text-neutral-400">Diverted from landfills & emissions</p>
+        </div>
+      </div>
+
+      <!-- Inventory Management Table (CRUD) -->
+      <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-neutral-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h3 class="text-lg font-bold text-neutral-900">Catalogue Inventory (Full CRUD)</h3>
+            <p class="text-xs text-neutral-500">Edit prices, adjust real-time stock levels, or remove deprecated listings.</p>
+          </div>
+          <div class="text-xs text-neutral-400">Synced directly with browser LocalStorage</div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-neutral-50 text-neutral-500 font-semibold text-xs uppercase tracking-wider border-b border-neutral-200">
+              <tr>
+                <th class="px-5 py-3">Product</th>
+                <th class="px-5 py-3">Category</th>
+                <th class="px-5 py-3">Price</th>
+                <th class="px-5 py-3">Eco Score / Carbon</th>
+                <th class="px-5 py-3">Stock</th>
+                <th class="px-5 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody" class="divide-y divide-neutral-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Customer Orders Log -->
+      <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-neutral-200">
+          <h3 class="text-lg font-bold text-neutral-900">Recent Customer Orders</h3>
+          <p class="text-xs text-neutral-500">Orders placed through checkout simulation.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-neutral-50 text-neutral-500 font-semibold text-xs uppercase tracking-wider border-b border-neutral-200">
+              <tr>
+                <th class="px-5 py-3">Order ID</th>
+                <th class="px-5 py-3">Customer</th>
+                <th class="px-5 py-3">Items</th>
+                <th class="px-5 py-3">Total Paid</th>
+                <th class="px-5 py-3">Payment</th>
+                <th class="px-5 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody" class="divide-y divide-neutral-100 text-xs">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== CART DRAWER ==================== -->
+  <div id="cartDrawerBackdrop" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+  <aside id="cartDrawer" class="fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-2xl z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div class="p-5 border-b border-neutral-200 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-basket-shopping text-forest"></i>
+        <h3 class="font-bold text-lg text-neutral-900">Your Eco Cart</h3>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Carbon Banner -->
+    <div class="bg-forest-soft/60 px-5 py-3 border-b border-emerald-100 flex items-center justify-between text-xs text-forest font-medium">
+      <span><i class="fa-solid fa-leaf mr-1.5"></i> CO₂ Saved by this order:</span>
+      <span id="cartCarbonOffset" class="font-bold">0.0 kg</span>
+    </div>
+
+    <!-- Items List -->
+    <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-5 space-y-4">
+      <!-- Items dynamically added -->
+    </div>
+
+    <!-- Footer / Checkout Section -->
+    <div class="p-5 border-t border-neutral-200 bg-neutral-50/50 space-y-4">
+      <div class="flex items-center gap-2">
+        <input type="text" id="couponInput" placeholder="Try 'ECO10' for 10% off" class="text-xs uppercase px-3 py-2 rounded-lg border border-neutral-200 w-full focus:outline-none focus:ring-1 focus:ring-forest bg-white" />
+        <button onclick="applyCoupon()" class="px-3 py-2 bg-neutral-900 text-white rounded-lg text-xs font-semibold hover:bg-neutral-800 transition">Apply</button>
+      </div>
+      <div id="couponNotice" class="text-[11px] font-medium hidden"></div>
+
+      <div class="space-y-1.5 text-xs text-neutral-600">
+        <div class="flex justify-between">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">₹0</span>
+        </div>
+        <div class="flex justify-between text-emerald-700">
+          <span>Carbon Offset Rebate</span>
+          <span id="cartDiscount">-₹0</span>
+        </div>
+        <div class="flex justify-between text-sm font-bold text-neutral-900 pt-2 border-t border-neutral-200">
+          <span>Grand Total</span>
+          <span id="cartGrandTotal">₹0</span>
+        </div>
+      </div>
+
+      <button onclick="startCheckout()" class="w-full py-3.5 bg-forest hover:bg-forest-light text-white font-bold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+        <span>Proceed to Ethical Checkout</span>
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== PRODUCT DETAIL MODAL ==================== -->
+  <div id="productDetailModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
+      <button onclick="closeProductDetailModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/90 shadow text-neutral-600 hover:text-black flex items-center justify-center">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="productDetailContent">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADD / EDIT PRODUCT MODAL (ADMIN CRUD) ==================== -->
+  <div id="productFormModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 id="formModalTitle" class="text-lg font-bold text-neutral-900">Add Sustainable Product</h3>
+        <button onclick="closeProductModal()" class="text-neutral-400 hover:text-neutral-700"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="productForm" onsubmit="saveProduct(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="formProductId" />
+        
+        <div>
+          <label class="block font-semibold mb-1">Product Title</label>
+          <input type="text" id="formTitle" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="e.g. Hemp Minimalist Shirt" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold mb-1">Category</label>
+            <select id="formCategory" class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none">
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Unisex">Unisex</option>
+              <option value="Upcycled">Upcycled</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Price (INR ₹)</label>
+            <input type="number" id="formPrice" required min="100" class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="1999" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold mb-1">Eco Score</label>
+            <select id="formEcoScore" class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none">
+              <option value="A+">A+ (Pristine Circular)</option>
+              <option value="A">A (Regenerative / Bio)</option>
+              <option value="B">B (Upcycled / Low Waste)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">CO₂ Offset (kg)</label>
+            <input type="number" step="0.1" id="formCarbon" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="3.5" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold mb-1">Material Composition</label>
+            <input type="text" id="formMaterial" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="100% Organic Hemp" />
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Stock Quantity</label>
+            <input type="number" id="formStock" required min="0" class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="25" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Image URL (Unsplash direct link)</label>
+          <input type="url" id="formImage" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="https://images.unsplash.com/..." />
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Description</label>
+          <textarea id="formDescription" rows="2" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:ring-1 focus:ring-forest focus:outline-none" placeholder="Explain the ethical supply chain..."></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-forest hover:bg-forest-light text-white font-bold rounded-xl text-sm transition">
+          Save Listing to Marketplace
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MULTI-STEP CHECKOUT MODAL ==================== -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="mb-5">
+        <h3 class="text-xl font-bold text-neutral-900">Carbon-Neutral Checkout</h3>
+        <p class="text-xs text-neutral-500">Every shipment includes certified tree plantation & zero plastic wrapping.</p>
+      </div>
+
+      <!-- Steps indicator -->
+      <div class="flex items-center justify-between mb-6 text-xs font-semibold text-neutral-400">
+        <span id="stepIndicator1" class="text-forest flex items-center"><i class="fa-solid fa-circle-dot mr-1"></i> 1. Shipping</span>
+        <span class="h-0.5 w-8 bg-neutral-200"></span>
+        <span id="stepIndicator2" class="flex items-center"><i class="fa-regular fa-circle mr-1"></i> 2. Payment</span>
+        <span class="h-0.5 w-8 bg-neutral-200"></span>
+        <span id="stepIndicator3" class="flex items-center"><i class="fa-regular fa-circle mr-1"></i> 3. Receipt</span>
+      </div>
+
+      <!-- Step 1: Address Form -->
+      <div id="checkoutStep1" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold mb-1 text-neutral-700">Full Name</label>
+          <input type="text" id="custName" value="Ayushman Singh" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-forest" />
+        </div>
+        <div>
+          <label class="block font-semibold mb-1 text-neutral-700">Hostel / Delivery Address</label>
+          <input type="text" id="custAddress" value="Room 312, Boys Hostel 4, LPU Campus" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-forest" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold mb-1 text-neutral-700">City / State</label>
+            <input type="text" id="custCity" value="Phagwara, Punjab" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-forest" />
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-neutral-700">Phone</label>
+            <input type="tel" id="custPhone" value="+91 98765 43210" required class="w-full p-2.5 rounded-lg border border-neutral-200 focus:outline-none focus:ring-1 focus:ring-forest" />
+          </div>
+        </div>
+        <button onclick="goToCheckoutStep2()" class="w-full py-3 mt-3 bg-forest hover:bg-forest-light text-white font-bold rounded-xl transition text-sm">
+          Continue to Payment
+        </button>
+      </div>
+
+      <!-- Step 2: Payment Simulation -->
+      <div id="checkoutStep2" class="hidden space-y-4 text-xs">
+        <label class="block font-semibold text-neutral-700">Select Ethical Payment Route</label>
+        <div class="space-y-2">
+          <label class="flex items-center p-3 rounded-xl border border-neutral-200 hover:border-forest cursor-pointer bg-neutral-50">
+            <input type="radio" name="paymentMethod" value="UPI" checked class="text-forest focus:ring-forest" />
+            <span class="ml-3 font-medium text-neutral-900"><i class="fa-solid fa-mobile-screen mr-2 text-forest"></i>UPI / GPay / PhonePe</span>
+          </label>
+          <label class="flex items-center p-3 rounded-xl border border-neutral-200 hover:border-forest cursor-pointer bg-neutral-50">
+            <input type="radio" name="paymentMethod" value="Card" class="text-forest focus:ring-forest" />
+            <span class="ml-3 font-medium text-neutral-900"><i class="fa-regular fa-credit-card mr-2 text-forest"></i>Debit / Credit Card</span>
+          </label>
+          <label class="flex items-center p-3 rounded-xl border border-neutral-200 hover:border-forest cursor-pointer bg-neutral-50">
+            <input type="radio" name="paymentMethod" value="COD" class="text-forest focus:ring-forest" />
+            <span class="ml-3 font-medium text-neutral-900"><i class="fa-solid fa-truck-ramp-box mr-2 text-forest"></i>Cash on Green Delivery</span>
+          </label>
+        </div>
+
+        <div class="p-3 bg-forest-soft rounded-xl text-forest text-xs space-y-1">
+          <div class="flex justify-between font-bold">
+            <span>Payable Amount:</span>
+            <span id="checkoutAmountDisplay">₹0</span>
+          </div>
+          <p class="text-[10px]">Zero transactional emissions fees applied.</p>
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="goToCheckoutStep1()" class="w-1/3 py-3 border border-neutral-300 rounded-xl font-semibold text-neutral-700 hover:bg-neutral-50">Back</button>
+          <button onclick="confirmOrder()" class="w-2/3 py-3 bg-forest hover:bg-forest-light text-white font-bold rounded-xl transition text-sm">Pay & Authorize</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Success Receipt -->
+      <div id="checkoutStep3" class="hidden text-center py-4 space-y-4">
+        <div class="w-16 h-16 bg-emerald-100 text-forest rounded-full flex items-center justify-center mx-auto text-2xl">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+          <h4 class="text-xl font-bold text-neutral-900">Order Placed Successfully!</h4>
+          <p class="text-xs text-neutral-500 mt-1">Order #<span id="confirmedOrderId" class="font-mono font-bold text-neutral-800"></span></p>
+        </div>
+        <div class="bg-neutral-50 p-4 rounded-2xl text-left text-xs space-y-1.5 border border-neutral-200">
+          <div class="flex justify-between text-neutral-600"><span>Deliver To:</span><span id="receiptName" class="font-semibold text-neutral-900"></span></div>
+          <div class="flex justify-between text-neutral-600"><span>Payment Mode:</span><span id="receiptMethod" class="font-semibold text-neutral-900"></span></div>
+          <div class="flex justify-between text-neutral-600"><span>Carbon Diverted:</span><span id="receiptCarbon" class="font-bold text-forest"></span></div>
+          <div class="flex justify-between font-bold text-neutral-900 pt-2 border-t"><span>Total Amount:</span><span id="receiptTotal"></span></div>
+        </div>
+        <button onclick="closeCheckoutModal()" class="w-full py-3 bg-forest hover:bg-forest-light text-white font-bold rounded-xl transition text-sm">
+          Return to Marketplace
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-neutral-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMsg">Product added</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // 20 CURATED SUSTAINABLE PRODUCTS (Preloaded into localStorage)
+    const INITIAL_PRODUCTS = [
+      {
+        id: 1,
+        title: "Khadi Organic Camp Shirt",
+        category: "Men",
+        price: 1899,
+        ecoScore: "A+",
+        carbonSavedKg: 4.8,
+        material: "100% Handspun Regenerative Khadi Cotton",
+        stock: 14,
+        image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=700&q=80",
+        description: "Zero-electricity woven khadi dyed with natural plant extracts. Breathable relaxed boxy silhouette perfect for summer climates."
+      },
+      {
+        id: 2,
+        title: "Reclaimed Denim Worker Jacket",
+        category: "Upcycled",
+        price: 3499,
+        ecoScore: "A+",
+        carbonSavedKg: 9.4,
+        material: "Post-consumer Upcycled Heavy Denim",
+        stock: 8,
+        image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=700&q=80",
+        description: "Constructed from repurposed discarded jeans. Unique vintage fades with reinforced double needle tailoring."
+      },
+      {
+        id: 3,
+        title: "Hemp Relaxed Pleated Trousers",
+        category: "Men",
+        price: 2799,
+        ecoScore: "A",
+        carbonSavedKg: 3.9,
+        material: "55% True Industrial Hemp, 45% Bio Linen",
+        stock: 19,
+        image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=700&q=80",
+        description: "Hemp uses 4x less water than standard cotton. Designed with an easy drape, loose straight leg profile."
+      },
+      {
+        id: 4,
+        title: "Ahimsa Peace Silk Midi Dress",
+        category: "Women",
+        price: 4999,
+        ecoScore: "A+",
+        carbonSavedKg: 5.2,
+        material: "Cruelty-Free Ahimsa Eri Silk",
+        stock: 6,
+        image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=700&q=80",
+        description: "Harvested without harming silkworms. Textured organic sheen with biodegradable corozo nut button accents."
+      },
+      {
+        id: 5,
+        title: "Ocean Plastic Recycled Fleece",
+        category: "Unisex",
+        price: 2499,
+        ecoScore: "A",
+        carbonSavedKg: 6.8,
+        material: "100% Repurposed Marine Ocean Bound PET",
+        stock: 22,
+        image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=700&q=80",
+        description: "Each fleece repurposes 38 plastic bottles recovered from coastal waterways into ultra-soft thermal insulation."
+      },
+      {
+        id: 6,
+        title: "Cork Leather Minimalist Backpack",
+        category: "Accessories",
+        price: 3199,
+        ecoScore: "A+",
+        carbonSavedKg: 7.1,
+        material: "Harvested Portuguese Oak Cork Bark",
+        stock: 11,
+        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80",
+        description: "100% water-resistant vegan leather harvested sustainably without cutting down trees. Includes padded laptop compartment."
+      },
+      {
+        id: 7,
+        title: "Natural Indigo Dyed Oversized Tee",
+        category: "Unisex",
+        price: 1199,
+        ecoScore: "A",
+        carbonSavedKg: 2.7,
+        material: "240 GSM Certified Organic Cotton",
+        stock: 35,
+        image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=700&q=80",
+        description: "Heavyweight drop-shoulder t-shirt dipped by hand in authentic bio-fermented indigo vats. Chemical free."
+      },
+      {
+        id: 8,
+        title: "Zero-Waste Patchwork Bucket Hat",
+        category: "Accessories",
+        price: 799,
+        ecoScore: "A+",
+        carbonSavedKg: 1.8,
+        material: "Tailoring Factory Fabric Offcuts",
+        stock: 15,
+        image: "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?auto=format&fit=crop&w=700&q=80",
+        description: "Assembled completely from surplus fabric scrap, diverting clean textiles directly out of municipal landfills."
+      },
+      {
+        id: 9,
+        title: "Bamboo Fiber Boxy Utility Shirt",
+        category: "Men",
+        price: 1999,
+        ecoScore: "A",
+        carbonSavedKg: 3.5,
+        material: "70% Closed-Loop Bamboo, 30% Organic Cotton",
+        stock: 17,
+        image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=700&q=80",
+        description: "Anti-odor, thermo-regulating fabric with functional military-inspired chest flap pockets and tonal stitch."
+      },
+      {
+        id: 10,
+        title: "Recycled Wool Winter Overshirt",
+        category: "Men",
+        price: 4299,
+        ecoScore: "A",
+        carbonSavedKg: 8.6,
+        material: "Mechanical Recycled Post-Consumer Wool",
+        stock: 9,
+        image: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=700&q=80",
+        description: "Milled in Prato, Italy from shredded vintage knitwear without new synthetic dyes or heavy chemical washing."
+      },
+      {
+        id: 11,
+        title: "Handloom Tussar Silk Wrap Top",
+        category: "Women",
+        price: 2899,
+        ecoScore: "A+",
+        carbonSavedKg: 4.1,
+        material: "Wild Forest Harvested Tussar Silk",
+        stock: 12,
+        image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=700&q=80",
+        description: "Rich natural golden luster woven by female artisan cooperatives in Jharkhand. Beautiful wrap front fit."
+      },
+      {
+        id: 12,
+        title: "Upcycled Carpenter Denim Shorts",
+        category: "Upcycled",
+        price: 1799,
+        ecoScore: "A",
+        carbonSavedKg: 5.7,
+        material: "Salvaged Vintage Levi's Denim",
+        stock: 14,
+        image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=700&q=80",
+        description: "Cut and re-sewn from damaged vintage work trousers. Raw hem edge with reinforced hammer loop detail."
+      },
+      {
+        id: 13,
+        title: "Organic Linen Tiered Sundress",
+        category: "Women",
+        price: 3699,
+        ecoScore: "A+",
+        carbonSavedKg: 4.4,
+        material: "100% Normandy Certified Flax Linen",
+        stock: 10,
+        image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=700&q=80",
+        description: "Rain-fed European flax linen requiring zero artificial irrigation. Breathable relaxed tiered summer staple."
+      },
+      {
+        id: 14,
+        title: "Plant Leather Minimalist Wallet",
+        category: "Accessories",
+        price: 899,
+        ecoScore: "A+",
+        carbonSavedKg: 2.1,
+        material: "Apple Peel Waste Bio-Polymer",
+        stock: 28,
+        image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80",
+        description: "Crafted from northern Italian apple orchard processing waste. Sleek 6-slot RFID shielded bi-fold cardholder."
+      },
+      {
+        id: 15,
+        title: "Eucalyptus Fiber Athletic Shorts",
+        category: "Unisex",
+        price: 1499,
+        ecoScore: "A",
+        carbonSavedKg: 3.1,
+        material: "TENCEL Lyocell derived from Eucalyptus",
+        stock: 20,
+        image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=700&q=80",
+        description: "Manufactured in a 99.5% solvent-recovery closed loop system. Silky handfeel with dynamic 4-way stretch."
+      },
+      {
+        id: 16,
+        title: "Artisanal Kantha Stitch Kimono",
+        category: "Upcycled",
+        price: 3999,
+        ecoScore: "A+",
+        carbonSavedKg: 7.9,
+        material: "Repurposed Vintage Cotton Saris",
+        stock: 5,
+        image: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=700&q=80",
+        description: "Hand-quilted kantha embroidery running across layers of soft vintage cotton saris. Truly one-of-a-kind wearable art."
+      },
+      {
+        id: 17,
+        title: "Kala Cotton Natural Dye Kurta",
+        category: "Men",
+        price: 2199,
+        ecoScore: "A+",
+        carbonSavedKg: 4.6,
+        material: "Indigenous Organic Kutch Kala Cotton",
+        stock: 13,
+        image: "https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&w=700&q=80",
+        description: "Rain-fed genetically pure indigenous cotton that survives drought without chemical pesticides or fertilizers."
+      },
+      {
+        id: 18,
+        title: "Recycled Brass Sculptural Ring",
+        category: "Accessories",
+        price: 649,
+        ecoScore: "A",
+        carbonSavedKg: 1.4,
+        material: "100% Melted Down Post-Industrial Brass Scrap",
+        stock: 30,
+        image: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=700&q=80",
+        description: "Hand-cast in Moradabad using traditional foundry crucible methods. Adjustable architectural band."
+      },
+      {
+        id: 19,
+        title: "Organic Waffle Knit Loungewear Set",
+        category: "Women",
+        price: 2999,
+        ecoScore: "A",
+        carbonSavedKg: 4.3,
+        material: "GOTS Certified Organic Combed Cotton",
+        stock: 11,
+        image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=80",
+        description: "Thermal waffle knit dyed using OEKOTEX compliant water-based dyes with low carbon grey water recycling."
+      },
+      {
+        id: 20,
+        title: "Circular Baggy Denim Jeans",
+        category: "Upcycled",
+        price: 2999,
+        ecoScore: "A+",
+        carbonSavedKg: 8.9,
+        material: "80% Recycled Cotton, 20% Organic Twill",
+        stock: 16,
+        image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=700&q=80",
+        description: "Designed strictly with removable screw-off buttons and zero rivets so that 100% of the denim can be re-shredded."
+      }
+    ];
+
+    // STATE MANAGEMENT
+    let products = JSON.parse(localStorage.getItem('eco_products')) || INITIAL_PRODUCTS;
+    let cart = JSON.parse(localStorage.getItem('eco_cart')) || [];
+    let orders = JSON.parse(localStorage.getItem('eco_orders')) || [
+      {
+        orderId: 'ECO-94812',
+        customer: 'Muskanpreet Kaur',
+        itemsSummary: 'Khadi Organic Camp Shirt (x1)',
+        totalPaid: 1899,
+        payment: 'UPI',
+        carbonSaved: 4.8,
+        status: 'Delivered'
+      },
+      {
+        orderId: 'ECO-83109',
+        customer: 'Jasleen Kaur',
+        itemsSummary: 'Reclaimed Denim Worker Jacket (x1)',
+        totalPaid: 3499,
+        payment: 'Card',
+        carbonSaved: 9.4,
+        status: 'Shipped'
+      }
+    ];
+    let appliedDiscount = 0; // % discount
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      saveProductsState();
+      renderProducts(products);
+      updateCartUI();
+      renderAdminDashboard();
+    });
+
+    function saveProductsState() {
+      localStorage.setItem('eco_products', JSON.stringify(products));
+    }
+
+    function saveOrdersState() {
+      localStorage.setItem('eco_orders', JSON.stringify(orders));
+    }
+
+    // SWITCH TABS (STORE / ADMIN)
+    function switchView(viewName) {
+      const storeView = document.getElementById('storeView');
+      const adminView = document.getElementById('adminView');
+      const navStoreBtn = document.getElementById('navStoreBtn');
+      const navAdminBtn = document.getElementById('navAdminBtn');
+      const roleBadge = document.getElementById('roleBadge');
+
+      if (viewName === 'admin') {
+        storeView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        navAdminBtn.className = "px-4 py-2 rounded-lg font-medium text-sm transition-colors text-forest bg-forest-soft";
+        navStoreBtn.className = "px-4 py-2 rounded-lg font-medium text-sm transition-colors text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100";
+        roleBadge.className = "hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-800 border border-purple-200";
+        roleBadge.innerHTML = '<i class="fa-solid fa-lock mr-1.5 text-[10px]"></i> Merchant Ops';
+        renderAdminDashboard();
+      } else {
+        adminView.classList.add('hidden');
+        storeView.classList.remove('hidden');
+        navStoreBtn.className = "px-4 py-2 rounded-lg font-medium text-sm transition-colors text-forest bg-forest-soft";
+        navAdminBtn.className = "px-4 py-2 rounded-lg font-medium text-sm transition-colors text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100";
+        roleBadge.className = "hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200";
+        roleBadge.innerHTML = '<i class="fa-solid fa-user mr-1.5 text-[10px]"></i> Shopper Mode';
+        applyFilters();
+      }
+    }
+
+    // RENDER PRODUCTS IN STORE
+    function renderProducts(items) {
+      const grid = document.getElementById('productsGrid');
+      const countLabel = document.getElementById('productCountLabel');
+      countLabel.innerText = `Showing ${items.length} sustainable items`;
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-neutral-400">
+            <i class="fa-solid fa-leaf text-4xl mb-3 text-neutral-300"></i>
+            <p class="font-semibold text-neutral-600">No sustainable products match your filter criteria.</p>
+            <p class="text-xs">Try clearing search terms or selecting another category.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(p => `
+        <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col group">
+          <div class="relative overflow-hidden aspect-[4/5] bg-neutral-100 cursor-pointer" onclick="openProductDetail(${p.id})">
+            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+            <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/95 text-forest shadow-sm backdrop-blur-sm">
+                <i class="fa-solid fa-seedling mr-1"></i>Score ${p.ecoScore}
+              </span>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-950/80 text-emerald-300 backdrop-blur-sm">
+                -${p.carbonSavedKg} kg CO₂
+              </span>
+            </div>
+            ${p.stock < 10 ? `<span class="absolute bottom-3 left-3 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Only ${p.stock} left</span>` : ''}
+          </div>
+
+          <div class="p-4 flex-grow flex flex-col justify-between">
+            <div class="space-y-1">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-neutral-400">${p.category}</div>
+              <h3 class="font-bold text-neutral-900 text-sm hover:text-forest transition cursor-pointer line-clamp-1" onclick="openProductDetail(${p.id})">${p.title}</h3>
+              <p class="text-[11px] text-neutral-500 line-clamp-1">${p.material}</p>
+            </div>
+
+            <div class="pt-4 flex items-center justify-between border-t border-neutral-100 mt-3">
+              <div>
+                <span class="text-base font-extrabold text-neutral-900">₹${p.price.toLocaleString('en-IN')}</span>
+              </div>
+              <button onclick="addToCart(${p.id})" class="px-3.5 py-2 rounded-xl bg-forest-soft hover:bg-forest text-forest hover:text-white text-xs font-bold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-plus text-[10px]"></i> Add
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // SEARCH & FILTER ENGINE
+    function applyFilters() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cat = document.getElementById('categoryFilter').value;
+      const sort = document.getElementById('sortBy').value;
+
+      let filtered = products.filter(p => {
+        const matchesQ = p.title.toLowerCase().includes(q) || p.material.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
+        const matchesCat = (cat === 'All') || (p.category === cat);
+        return matchesQ && matchesCat;
+      });
+
+      if (sort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+      else if (sort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+      else if (sort === 'carbon') filtered.sort((a,b) => b.carbonSavedKg - a.carbonSavedKg);
+      else if (sort === 'rating') filtered.sort((a,b) => b.stock - a.stock);
+
+      renderProducts(filtered);
+    }
+
+    // PRODUCT DETAIL MODAL
+    function openProductDetail(productId) {
+      const p = products.find(item => item.id === productId);
+      if (!p) return;
+
+      const modal = document.getElementById('productDetailModal');
+      const content = document.getElementById('productDetailContent');
+
+      content.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2">
+          <div class="aspect-square bg-neutral-100">
+            <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover" />
+          </div>
+          <div class="p-6 md:p-8 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-forest-soft text-forest">Eco Score ${p.ecoScore}</span>
+                <span class="text-xs text-neutral-400 font-semibold uppercase">${p.category}</span>
+              </div>
+              <h2 class="text-xl font-bold text-neutral-900">${p.title}</h2>
+              <div class="text-2xl font-black text-neutral-900">₹${p.price.toLocaleString('en-IN')}</div>
+              <p class="text-xs text-neutral-600 leading-relaxed">${p.description}</p>
+              
+              <div class="p-3.5 bg-neutral-50 rounded-xl space-y-1.5 border border-neutral-200">
+                <div class="text-xs font-bold text-neutral-800"><i class="fa-solid fa-certificate text-forest mr-1.5"></i>Fabric & Material Origin</div>
+                <div class="text-xs text-neutral-600">${p.material}</div>
+                <div class="text-[11px] font-semibold text-emerald-700 pt-1">
+                  <i class="fa-solid fa-tree mr-1"></i>Saves approximately ${p.carbonSavedKg} kg of CO₂ vs virgin synthetic alternatives.
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t space-y-3">
+              <div class="text-xs text-neutral-500 font-medium">Available Inventory: <strong class="text-neutral-900">${p.stock} units</strong></div>
+              <button onclick="addToCart(${p.id}); closeProductDetailModal();" class="w-full py-3 bg-forest hover:bg-forest-light text-white font-bold rounded-xl transition text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-bag-shopping"></i> Add to Ethical Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function closeProductDetailModal() {
+      document.getElementById('productDetailModal').classList.add('hidden');
+    }
+
+    // CART OPERATIONS
+    function toggleCartDrawer(open) {
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+      if (open) {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('hidden');
+      } else {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      const existing = cart.find(item => item.id === productId);
+      if (existing) {
+        if (existing.qty < product.stock) {
+          existing.qty += 1;
+        } else {
+          showToast(`Max available stock reached (${product.stock})`);
+          return;
+        }
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+
+      saveCartState();
+      updateCartUI();
+      showToast(`Added "${product.title}" to bag`);
+    }
+
+    function updateCartQty(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      const product = products.find(p => p.id === productId);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== productId);
+      } else if (product && item.qty > product.stock) {
+        item.qty = product.stock;
+        showToast(`Stock limit: only ${product.stock} units left`);
+      }
+
+      saveCartState();
+      updateCartUI();
+    }
+
+    function saveCartState() {
+      localStorage.setItem('eco_cart', JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cartCountBadge');
+      const container = document.getElementById('cartItemsContainer');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const discountEl = document.getElementById('cartDiscount');
+      const totalEl = document.getElementById('cartGrandTotal');
+      const carbonOffsetEl = document.getElementById('cartCarbonOffset');
+
+      const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+      badge.innerText = totalItems;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-neutral-400 py-12 text-center">
+            <i class="fa-solid fa-bag-shopping text-5xl mb-3 text-neutral-300"></i>
+            <p class="font-bold text-neutral-700">Your bag is currently empty</p>
+            <p class="text-xs text-neutral-400 mt-1">Explore our low-carbon circular collection!</p>
+          </div>
+        `;
+        subtotalEl.innerText = '₹0';
+        discountEl.innerText = '-₹0';
+        totalEl.innerText = '₹0';
+        carbonOffsetEl.innerText = '0.0 kg';
+        return;
+      }
+
+      let subtotal = 0;
+      let totalCarbon = 0;
+
+      container.innerHTML = cart.map(item => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        totalCarbon += (item.carbonSavedKg * item.qty);
+
+        return `
+          <div class="flex items-center gap-3 bg-neutral-50 p-3 rounded-xl border border-neutral-200/80">
+            <img src="${item.image}" class="w-16 h-16 rounded-lg object-cover" />
+            <div class="flex-grow min-w-0">
+              <h4 class="text-xs font-bold text-neutral-900 truncate">${item.title}</h4>
+              <div class="text-xs font-semibold text-neutral-600">₹${item.price.toLocaleString('en-IN')}</div>
+              <div class="text-[10px] text-emerald-700 font-semibold"><i class="fa-solid fa-leaf mr-1"></i>-${(item.carbonSavedKg * item.qty).toFixed(1)} kg CO₂</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 rounded-md bg-white border border-neutral-300 flex items-center justify-center text-xs font-bold hover:bg-neutral-100">-</button>
+              <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+              <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 rounded-md bg-white border border-neutral-300 flex items-center justify-center text-xs font-bold hover:bg-neutral-100">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const discountAmt = Math.round(subtotal * (appliedDiscount / 100));
+      const grandTotal = subtotal - discountAmt;
+
+      subtotalEl.innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+      discountEl.innerText = `-₹${discountAmt.toLocaleString('en-IN')}`;
+      totalEl.innerText = `₹${grandTotal.toLocaleString('en-IN')}`;
+      carbonOffsetEl.innerText = `${totalCarbon.toFixed(1)} kg`;
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponInput').value.trim().toUpperCase();
+      const notice = document.getElementById('couponNotice');
+      if (code === 'ECO10') {
+        appliedDiscount = 10;
+        notice.className = "text-[11px] font-semibold text-emerald-700 block";
+        notice.innerText = "Coupon 'ECO10' applied (10% carbon saving discount)!";
+      } else {
+        appliedDiscount = 0;
+        notice.className = "text-[11px] font-semibold text-rose-600 block";
+        notice.innerText = "Invalid coupon. Try 'ECO10'";
+      }
+      updateCartUI();
+    }
+
+    // CHECKOUT WORKFLOW
+    function startCheckout() {
+      if (cart.length === 0) {
+        showToast("Add items to cart before proceeding!");
+        return;
+      }
+      toggleCartDrawer(false);
+      goToCheckoutStep1();
+      document.getElementById('checkoutModal').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    function goToCheckoutStep1() {
+      document.getElementById('checkoutStep1').classList.remove('hidden');
+      document.getElementById('checkoutStep2').classList.add('hidden');
+      document.getElementById('checkoutStep3').classList.add('hidden');
+      setStepIndicators(1);
+    }
+
+    function goToCheckoutStep2() {
+      const name = document.getElementById('custName').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      if (!name || !address) {
+        showToast("Please provide shipping details");
+        return;
+      }
+
+      document.getElementById('checkoutStep1').classList.add('hidden');
+      document.getElementById('checkoutStep2').classList.remove('hidden');
+      document.getElementById('checkoutStep3').classList.add('hidden');
+      setStepIndicators(2);
+
+      const totalEl = document.getElementById('cartGrandTotal').innerText;
+      document.getElementById('checkoutAmountDisplay').innerText = totalEl;
+    }
+
+    function setStepIndicators(step) {
+      const s1 = document.getElementById('stepIndicator1');
+      const s2 = document.getElementById('stepIndicator2');
+      const s3 = document.getElementById('stepIndicator3');
+
+      s1.className = step >= 1 ? "text-forest font-bold flex items-center" : "text-neutral-400 flex items-center";
+      s2.className = step >= 2 ? "text-forest font-bold flex items-center" : "text-neutral-400 flex items-center";
+      s3.className = step >= 3 ? "text-forest font-bold flex items-center" : "text-neutral-400 flex items-center";
+    }
+
+    function confirmOrder() {
+      const name = document.getElementById('custName').value;
+      const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const orderId = 'ECO-' + Math.floor(10000 + Math.random() * 90000);
+      
+      let subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const discountAmt = Math.round(subtotal * (appliedDiscount / 100));
+      const grandTotal = subtotal - discountAmt;
+      const totalCarbon = cart.reduce((acc, i) => acc + (i.carbonSavedKg * i.qty), 0);
+
+      // Deduct stock from catalogue
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        if (prod) {
+          prod.stock = Math.max(0, prod.stock - item.qty);
+        }
+      });
+      saveProductsState();
+
+      // Record Order in admin logs
+      const newOrder = {
+        orderId: orderId,
+        customer: name,
+        itemsSummary: cart.map(i => `${i.title} (x${i.qty})`).join(', '),
+        totalPaid: grandTotal,
+        payment: method,
+        carbonSaved: parseFloat(totalCarbon.toFixed(1)),
+        status: 'In Transit'
+      };
+      orders.unshift(newOrder);
+      saveOrdersState();
+
+      // Update Receipt Screen
+      document.getElementById('confirmedOrderId').innerText = orderId;
+      document.getElementById('receiptName').innerText = name;
+      document.getElementById('receiptMethod').innerText = method;
+      document.getElementById('receiptCarbon').innerText = `${totalCarbon.toFixed(1)} kg CO₂ diverted`;
+      document.getElementById('receiptTotal').innerText = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+      // Reset Cart
+      cart = [];
+      saveCartState();
+      updateCartUI();
+
+      // Show Step 3
+      document.getElementById('checkoutStep2').classList.add('hidden');
+      document.getElementById('checkoutStep3').classList.remove('hidden');
+      setStepIndicators(3);
+      renderAdminDashboard();
+    }
+
+    // ==================== ADMIN CRUD OPERATIONS ====================
+    function renderAdminDashboard() {
+      // 1. Calculate KPI Metrics
+      const totalRev = orders.reduce((acc, o) => acc + o.totalPaid, 0);
+      const totalCO2 = orders.reduce((acc, o) => acc + o.carbonSaved, 0);
+      
+      document.getElementById('kpiRevenue').innerText = `₹${totalRev.toLocaleString('en-IN')}`;
+      document.getElementById('kpiOrders').innerText = orders.length;
+      document.getElementById('kpiProducts').innerText = products.length;
+      document.getElementById('kpiCarbon').innerText = `${totalCO2.toFixed(1)} kg`;
+
+      // 2. Render Products Table
+      const tableBody = document.getElementById('adminTableBody');
+      tableBody.innerHTML = products.map(p => `
+        <tr class="hover:bg-neutral-50/70 transition">
+          <td class="px-5 py-3">
+            <div class="flex items-center gap-3">
+              <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover border" />
+              <div>
+                <span class="font-bold text-neutral-900 block truncate max-w-[200px]">${p.title}</span>
+                <span class="text-[11px] text-neutral-400 block">${p.material}</span>
+              </div>
+            </div>
+          </td>
+          <td class="px-5 py-3 font-medium text-neutral-600">${p.category}</td>
+          <td class="px-5 py-3 font-bold text-neutral-900">₹${p.price.toLocaleString('en-IN')}</td>
+          <td class="px-5 py-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-forest-soft text-forest">
+              Score ${p.ecoScore} (${p.carbonSavedKg} kg)
+            </span>
+          </td>
+          <td class="px-5 py-3 font-semibold ${p.stock < 10 ? 'text-amber-600' : 'text-neutral-700'}">${p.stock} units</td>
+          <td class="px-5 py-3 text-right space-x-2">
+            <button onclick="editProduct(${p.id})" class="p-1.5 text-neutral-500 hover:text-forest transition" title="Edit">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button onclick="deleteProduct(${p.id})" class="p-1.5 text-neutral-400 hover:text-rose-600 transition" title="Delete">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      // 3. Render Orders Table
+      const ordersTable = document.getElementById('ordersTableBody');
+      ordersTable.innerHTML = orders.map(o => `
+        <tr class="hover:bg-neutral-50/70">
+          <td class="px-5 py-3 font-mono font-bold text-neutral-800">${o.orderId}</td>
+          <td class="px-5 py-3 font-medium">${o.customer}</td>
+          <td class="px-5 py-3 text-neutral-600 truncate max-w-[200px]" title="${o.itemsSummary}">${o.itemsSummary}</td>
+          <td class="px-5 py-3 font-bold text-neutral-900">₹${o.totalPaid.toLocaleString('en-IN')}</td>
+          <td class="px-5 py-3 font-medium">${o.payment}</td>
+          <td class="px-5 py-3">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${o.status === 'Delivered' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-50 text-blue-800'}">
+              ${o.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openProductModal() {
+      document.getElementById('productForm').reset();
+      document.getElementById('formProductId').value = '';
+      document.getElementById('formModalTitle').innerText = "Add Sustainable Product";
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productFormModal').classList.add('hidden');
+    }
+
+    function editProduct(productId) {
+      const p = products.find(i => i.id === productId);
+      if (!p) return;
+
+      document.getElementById('formProductId').value = p.id;
+      document.getElementById('formTitle').value = p.title;
+      document.getElementById('formCategory').value = p.category;
+      document.getElementById('formPrice').value = p.price;
+      document.getElementById('formEcoScore').value = p.ecoScore;
+      document.getElementById('formCarbon').value = p.carbonSavedKg;
+      document.getElementById('formMaterial').value = p.material;
+      document.getElementById('formStock').value = p.stock;
+      document.getElementById('formImage').value = p.image;
+      document.getElementById('formDescription').value = p.description;
+
+      document.getElementById('formModalTitle').innerText = "Edit Product Details";
+      document.getElementById('productFormModal').classList.remove('hidden');
+    }
+
+    function saveProduct(e) {
+      e.preventDefault();
+      const idVal = document.getElementById('formProductId').value;
+
+      const productPayload = {
+        title: document.getElementById('formTitle').value.trim(),
+        category: document.getElementById('formCategory').value,
+        price: parseFloat(document.getElementById('formPrice').value),
+        ecoScore: document.getElementById('formEcoScore').value,
+        carbonSavedKg: parseFloat(document.getElementById('formCarbon').value),
+        material: document.getElementById('formMaterial').value.trim(),
+        stock: parseInt(document.getElementById('formStock').value, 10),
+        image: document.getElementById('formImage').value.trim(),
+        description: document.getElementById('formDescription').value.trim()
+      };
+
+      if (idVal) {
+        // UPDATE existing
+        const idx = products.findIndex(p => p.id === parseInt(idVal, 10));
+        if (idx !== -1) {
+          products[idx] = { ...products[idx], ...productPayload };
+          showToast("Listing successfully updated");
+        }
+      } else {
+        // CREATE new
+        const newProduct = {
+          id: Date.now(),
+          ...productPayload
+        };
+        products.unshift(newProduct);
+        showToast("New product published to marketplace");
+      }
+
+      saveProductsState();
+      closeProductModal();
+      renderAdminDashboard();
+      applyFilters();
+    }
+
+    function deleteProduct(productId) {
+      if (confirm("Are you sure you want to permanently remove this product from the marketplace?")) {
+        products = products.filter(p => p.id !== productId);
+        cart = cart.filter(i => i.id !== productId);
+        saveProductsState();
+        saveCartState();
+        renderAdminDashboard();
+        applyFilters();
+        updateCartUI();
+        showToast("Product deleted from catalogue");
+      }
+    }
+
+    // TOAST HELPER
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+  </script>
+</body>
+</html> 
